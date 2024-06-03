@@ -5,7 +5,7 @@ import {PersistGate} from 'redux-persist/integration/react';
 
 import FlightSearch from './src/screens/Flights/FlightSearch';
 import FlightResult from './src/screens/Flights/FlightResult';
-import Navigation from './src/navigation1';
+import Navigation from './src/navigation1/navigation1';
 
 console.disableYellowBox = true;
 

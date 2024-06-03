@@ -16,7 +16,7 @@ import {
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
 
-export default function FlightSearch({navigation}) {
+export default function HotelSearch({navigation}) {
   const {colors} = useTheme();
   const {t} = useTranslation();
 
