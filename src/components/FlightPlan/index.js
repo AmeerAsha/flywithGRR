@@ -17,10 +17,10 @@ export default function FlightPlan(props) {
         style={styles.colCenter}
         onPress={onPressFrom}
         activeOpacity={0.9}>
-        <Text body1 light>
-          {t('from')}
+        <Text body1 bold>
+          {t('FROM')}
         </Text>
-        <Text header semibold>
+        <Text title2>
           {fromCode}
         </Text>
         <Text body1>{from}</Text>
@@ -44,10 +44,10 @@ export default function FlightPlan(props) {
         style={styles.colCenter}
         onPress={onPressTo}
         activeOpacity={0.9}>
-        <Text body1 light>
-          {t('to')}
+        <Text body1 bold>
+          {t('TO')}
         </Text>
-        <Text header semibold>
+        <Text title2>
           {toCode}
         </Text>
         <Text body1>{to}</Text>

@@ -11,6 +11,7 @@ import {
   FormOption,
   QuantityPicker,
   Button,
+  Text,
 } from './../../../components';
 
 import styles from './styles';
@@ -67,9 +68,9 @@ export default function FlightSearch({navigation}) {
   };
 
   return (
-    <View style={{flex: 1,margin:30,marginTop:100,borderWidth:0.5,borderRadius:15,backgroundColor:"white",borderColor:"gray"}}>
+    <View style={{flex:1}}>
       <Header
-        title={t('search_flight')}
+        title={t('')}
         
       />
       <SafeAreaView
@@ -82,15 +83,15 @@ export default function FlightSearch({navigation}) {
               primary={round}
               round
               onPress={() => onSetFlightType(true)}
-              style={{marginHorizontal: 20}}>
-              {t('round_trip')}
+              style={{marginHorizontal: 70}}>
+              {t('Return')}
             </Tag>
             <Tag
               outline={round}
               primary={!round}
               round
               onPress={() => onSetFlightType(false)}>
-              {t('one_way')}
+              {t('OneWay')}
             </Tag>
           </View>
           <FlightPlan
@@ -99,13 +100,17 @@ export default function FlightSearch({navigation}) {
             toCode={to.value}
             from={from.name}
             to={to.name}
-            style={{marginTop: 20}}
+            style={{marginTop: 30}}
             onPressFrom={() => onSelectFlight('from')}
             onPressTo={() => onSelectFlight('to')}
           />
-          <BookingTime style={{marginTop: 20}} />
-          <FormOption style={{marginTop: 20}} />
-          <View style={{marginTop: 20, flexDirection: 'row'}}>
+          <BookingTime style={{marginTop: 30}} />
+          <Text body1 bold style={{marginTop:30,marginHorizontal:100}}>
+          {t('TRAVELLERS')}
+        </Text>
+          
+          <View style={{marginTop:5, flexDirection: 'row'}}>
+          
             <QuantityPicker
               label={t('adults')}
               detail={`>= 12 ${t('years')}`}
@@ -124,7 +129,7 @@ export default function FlightSearch({navigation}) {
             />
           </View>
         </ScrollView>
-        <View style={{padding: 20}}>
+        <View style={{padding: 50}}>
           <Button
             loading={loading}
             full

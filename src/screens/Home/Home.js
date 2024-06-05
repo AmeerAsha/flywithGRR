@@ -6,7 +6,7 @@ import styles from './styles';
 import * as Utils from './../../utils'
 
 
-const Home = () => {
+const Home = ({navigation}) => {
   const [heightHeader, setHeightHeader] = useState(Utils.heightHeader());
   const deltaY = new Animated.Value(0);
   const heightImageBanner = Utils.scaleWithPixel(800);
@@ -30,7 +30,7 @@ const Home = () => {
         ]}
       />
 
-    <FlightSearch/>
+    <FlightSearch style={{flex: 1,margin:30,marginTop:100,borderWidth:0.5,borderRadius:15,backgroundColor:"black",borderColor:"gray"}}/>
     </ScrollView>
   )
 }

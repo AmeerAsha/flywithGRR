@@ -163,23 +163,30 @@ export default function BookingTime(props) {
         )}
       </Modal>
       <TouchableOpacity style={styles.itemPick} onPress={() => openModal()}>
-        <Text caption1 light style={{marginBottom: 5}}>
-          {t('check_in')}
+        <Text body1 bold style={{marginBottom: 5}}>
+          {t('DEPATURE DATE')}
         </Text>
-        <Text headline semibold>
+        <View style={{flex:1,flexDirection:"row"}}>
+        <Text subhead>
           {checkInTime}
         </Text>
+        <Text style={{marginHorizontal:20}}><Icon name="calendar-alt" size={20}/></Text>
+        </View>
+        
       </TouchableOpacity>
       <View style={[styles.linePick, {backgroundColor: colors.border}]} />
       <TouchableOpacity
         style={styles.itemPick}
         onPress={() => openModal(false)}>
-        <Text caption1 light style={{marginBottom: 5}}>
-          {t('check_out')}
+        <Text body1 bold style={{marginBottom: 5}}>
+          {t('RETURN DATE')}
         </Text>
-        <Text headline semibold>
+        <View style={{flex:1,flexDirection:"row"}}>
+        <Text subhead>
           {checkOutTime}
         </Text>
+        <Text style={{marginHorizontal:20}}><Icon name="calendar-alt" size={20}/></Text>
+        </View>
       </TouchableOpacity>
     </View>
   );
@@ -197,10 +204,10 @@ BookingTime.propTypes = {
 
 BookingTime.defaultProps = {
   style: {},
-  checkInTime: '2020-02-25',
-  checkOutTime: '2020-02-29',
-  minDate: '2019-05-10',
-  maxDate: '2020-05-30',
+  checkInTime: '2024-06-01',
+  checkOutTime: '2024-06-05',
+  minDate: '2023-05-10',
+  maxDate: '2030-05-30',
   onCancel: () => {},
   onChange: () => {},
 };

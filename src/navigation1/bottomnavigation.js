@@ -11,9 +11,10 @@ import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import Home from '../screens/Home/Home';
 import FlightSearch from '../screens/Flights/FlightSearch';
 
-import AboutUs from '../screens/AboutUs/AboutUs';
+
 import Login from '../screens/Login/Login';
 import HotelSearch from '../screens/Hotel/HotelSearch';
+import AboutUs from '../screens/AboutUs/index.';
 
 
 const Tab = createBottomTabNavigator();

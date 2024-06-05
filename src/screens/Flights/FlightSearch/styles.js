@@ -7,6 +7,7 @@ export default StyleSheet.create({
   flightType: {
     flexDirection: 'row',
     alignItems: 'center',
+    
   },
   contentRow: {flexDirection: 'row', marginTop: 20},
   centerView: {
