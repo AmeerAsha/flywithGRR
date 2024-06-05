@@ -30,7 +30,7 @@ const Home = ({navigation}) => {
         ]}
       />
 
-    <FlightSearch style={{flex: 1,margin:30,marginTop:100,borderWidth:0.5,borderRadius:15,backgroundColor:"black",borderColor:"gray"}}/>
+    <FlightSearch style={{flex: 1,margin:30,marginTop:100,borderWidth:0.5,borderRadius:15,backgroundColor:"white",borderColor:"gray",padding:20}}/>
     </ScrollView>
   )
 }

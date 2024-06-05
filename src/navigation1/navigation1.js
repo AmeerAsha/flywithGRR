@@ -15,6 +15,8 @@ import SelectFlight from '../screens/Flights/SelectFlight';
 import PaymentMethod from '../screens/Payments/PaymentMethod';
 import PreviewPayment from '../screens/Payments/PreviewPayment';
 import Bottomnavigation from './bottomnavigation';
+import SignIn from '../screens/Profile/SignIn';
+import SignUp from '../screens/Profile/SignUp';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +37,8 @@ const Navigation = () => {
           <Stack.Screen name="SelectFlight" component={SelectFlight} options={{headerShown:false}}/>
           <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown:false}}/>
           <Stack.Screen name="PreviewPayment" component={PreviewPayment} options={{headerShown:false}}/>
+          <Stack.Screen name="SignIn" component={SignIn} options={{headerShown:false}}/>
+          <Stack.Screen name="SignUP" component={SignUp} options={{headerShown:false}}/>
         </Stack.Navigator>
         
     </NavigationContainer>

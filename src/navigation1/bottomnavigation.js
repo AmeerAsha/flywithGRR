@@ -15,6 +15,7 @@ import FlightSearch from '../screens/Flights/FlightSearch';
 import Login from '../screens/Login/Login';
 import HotelSearch from '../screens/Hotel/HotelSearch';
 import AboutUs from '../screens/AboutUs/index.';
+import SignIn from '../screens/Profile/SignIn';
 
 
 const Tab = createBottomTabNavigator();
@@ -64,7 +65,7 @@ const Bottomnavigation = () => {
           <Tab.Screen name="Flights" component={FlightSearch} />
           <Tab.Screen name="Hotel" component={HotelSearch} />
           <Tab.Screen name='AboutUs'component={AboutUs}/>
-          <Tab.Screen name='Login'component={Login}/> 
+          <Tab.Screen name='Login'component={SignIn}/> 
           
         </Tab.Navigator>
         
