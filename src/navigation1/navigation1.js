@@ -38,7 +38,7 @@ const Navigation = () => {
           <Stack.Screen name="PaymentMethod" component={PaymentMethod} options={{headerShown:false}}/>
           <Stack.Screen name="PreviewPayment" component={PreviewPayment} options={{headerShown:false}}/>
           <Stack.Screen name="SignIn" component={SignIn} options={{headerShown:false}}/>
-          <Stack.Screen name="SignUP" component={SignUp} options={{headerShown:false}}/>
+          <Stack.Screen name="SignUp" component={SignUp} options={{headerShown:false}}/>
         </Stack.Navigator>
         
     </NavigationContainer>

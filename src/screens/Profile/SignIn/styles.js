@@ -5,11 +5,13 @@ import {BaseColor} from './../../../config';
 export default StyleSheet.create({
   textInput: {
     height: 60,
-    backgroundColor: BaseColor.dividerColor,
+    backgroundColor: BaseColor.whiteColor,
     borderRadius: 5,
     marginTop: 10,
     padding: 10,
     width: '100%',
+    borderWidth:0.5,
+    borderColor:BaseColor.orangeColor
     
   },
   contain: {

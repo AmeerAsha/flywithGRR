@@ -1,6 +1,6 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-import {BaseColor} from '@config';
+import {BaseColor} from './../../../config';
 
 export default StyleSheet.create({
   contain: {
@@ -10,16 +10,23 @@ export default StyleSheet.create({
     flex: 1,
   },
   textInput: {
-    height: 46,
-    backgroundColor: BaseColor.fieldColor,
+    height: 60,
+    backgroundColor: BaseColor.whiteColor,
     borderRadius: 5,
     marginTop: 10,
     padding: 10,
     width: '100%',
+    borderWidth:0.5,
+    borderColor:BaseColor.orangeColor
   },
   contentActionBottom: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 25,
   },
+  title:{
+    textAlign:"center",
+    marginTop:50,
+    color:BaseColor.orangeColor
+ },
 });

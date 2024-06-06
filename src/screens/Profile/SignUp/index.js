@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {View, KeyboardAvoidingView, Platform} from 'react-native';
+import {View, KeyboardAvoidingView, Platform, TouchableOpacity} from 'react-native';
 import {BaseStyle, useTheme} from './../../../config';
-import {Header, SafeAreaView, Icon, Button, TextInput} from './../../../components';
+import {Header, SafeAreaView, Icon, Button, TextInput,Text} from './../../../components';
 import styles from './styles';
 import {useTranslation} from 'react-i18next';
 
@@ -46,22 +46,8 @@ export default function SignUp({navigation}) {
 
   return (
     <View style={{flex: 1}}>
-      <Header
-        title={t('Register')}
-        renderLeft={() => {
-          return (
-            <Icon
-              name="arrow-left"
-              size={20}
-              color={colors.primary}
-              enableRTL={true}
-            />
-          );
-        }}
-        onPressLeft={() => {
-          navigation.goBack();
-        }}
-      />
+      <Text title1 style={styles.title}        
+      >{t('Register')}</Text>
       <SafeAreaView
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
