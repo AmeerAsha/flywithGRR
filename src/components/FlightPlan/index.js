@@ -5,6 +5,8 @@ import {Icon, Text} from './../../components';
 import styles from './styles';
 import {useTheme} from './../../config';
 import {useTranslation} from 'react-i18next';
+import Sample from '../../screens/Sample';
+import FlightPlan1 from '../FlightPlan1';
 
 export default function FlightPlan(props) {
   const {t} = useTranslation();
@@ -12,47 +14,16 @@ export default function FlightPlan(props) {
   const {style, from, fromCode, to, toCode, round, onPressFrom, onPressTo} =
     props;
   return (
-    <View style={[styles.contentRow, style]}>
-      <TouchableOpacity
-        style={styles.colCenter}
-        onPress={onPressFrom}
-        activeOpacity={0.9}>
-        <Text body1 bold>
-          {t('FROM')}
-        </Text>
-        <Text title2>
-          {fromCode}
-        </Text>
-        <Text body1>{from}</Text>
-      </TouchableOpacity>
-      <View style={styles.centerView}>
-        <Icon name="plane" color={colors.primary} size={24} solid />
-        {round && (
-          <Icon
-            name="plane"
-            color={colors.primary}
-            size={24}
-            solid
-            style={{
-              transform: [{rotate: '180deg'}],
-              marginTop: 5,
-            }}
-          />
-        )}
-      </View>
-      <TouchableOpacity
-        style={styles.colCenter}
-        onPress={onPressTo}
-        activeOpacity={0.9}>
-        <Text body1 bold>
-          {t('TO')}
-        </Text>
-        <Text title2>
-          {toCode}
-        </Text>
-        <Text body1>{to}</Text>
-      </TouchableOpacity>
-    </View>
+    
+      
+       <FlightPlan1/>
+        
+        
+        
+      
+      
+      
+    
   );
 }
 

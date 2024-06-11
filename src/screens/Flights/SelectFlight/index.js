@@ -10,6 +10,8 @@ import {Header, SafeAreaView, Icon, TextInput, Text, Image} from './../../../com
 import styles from './styles';
 import {FlightBrandData} from './../../../data';
 import {useTranslation} from 'react-i18next';
+import axios from 'axios';
+
 
 export default function SelectFlight({navigation, route}) {
   const {colors} = useTheme();
@@ -26,6 +28,7 @@ export default function SelectFlight({navigation, route}) {
     }),
   );
   const [loading, setLoading] = useState(false);
+  
 
   /**
    * @description Called when setting flight is selected
@@ -33,6 +36,9 @@ export default function SelectFlight({navigation, route}) {
    * @date 2019-08-03
    * @param {object} select
    */
+
+  
+
   const onChange = select => {
     setFlight(
       flight.map(item => {

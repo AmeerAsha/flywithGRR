@@ -10,9 +10,6 @@ import Icon2 from 'react-native-vector-icons/Fontisto'
 import Icon3 from 'react-native-vector-icons/MaterialIcons'
 import Home from '../screens/Home/Home';
 import FlightSearch from '../screens/Flights/FlightSearch';
-
-
-import Login from '../screens/Login/Login';
 import HotelSearch from '../screens/Hotel/HotelSearch';
 import AboutUs from '../screens/AboutUs/index.';
 import SignIn from '../screens/Profile/SignIn';
