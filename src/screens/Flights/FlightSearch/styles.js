@@ -25,6 +25,10 @@ export default StyleSheet.create({
     marginTop:10,marginLeft:10
 
 },
+from1:{
+  marginTop:15,marginLeft:7
+
+},
 Textinput:{
     borderWidth:1,
     borderColor:"#E5634D",
@@ -69,5 +73,11 @@ centerView: {
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 10,
+  },
+  contentPicker: {
+    padding: 10,
+    borderRadius: 8,
+    flex: 1,
+    alignItems: 'center',
   },
 });

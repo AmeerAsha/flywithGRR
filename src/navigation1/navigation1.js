@@ -17,6 +17,7 @@ import PreviewPayment from '../screens/Payments/PreviewPayment';
 import Bottomnavigation from './bottomnavigation';
 import SignIn from '../screens/Profile/SignIn';
 import SignUp from '../screens/Profile/SignUp';
+import OneWayFlight from '../screens/Flights/OneWayFlight';
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,7 @@ const Navigation = () => {
           <Stack.Screen name="PreviewPayment" component={PreviewPayment} options={{headerShown:false}}/>
           <Stack.Screen name="SignIn" component={SignIn} options={{headerShown:false}}/>
           <Stack.Screen name="SignUp" component={SignUp} options={{headerShown:false}}/>
+          <Stack.Screen name="OneWayFlight" component={OneWayFlight} options={{headerShown:false}}/>
         </Stack.Navigator>
         
     </NavigationContainer>
