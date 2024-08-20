@@ -81,4 +81,13 @@ export const Images = {
   event5: require('./../assets/images/event-5.jpg'),
   event6: require('./../assets/images/event-6.jpg'),
   event7: require('./../assets/images/event-7.jpg'),
-};
+  A0:require('./../assets/images/0A.png'),
+  D0:require('./../assets/images/0D.png'),
+  A2:require('./../assets/images/2A.png'),
+  B2:require('./../assets/images/2B.png'),
+  F2:require('./../assets/images/2F.png'),
+  J2:require('./../assets/images/2J.png'), 
+  loader :require('./../assets/img/loader.gif')     
+}
+
+

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { View, ScrollView, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import { BaseStyle, Images, useTheme, BaseColor } from "./../../../config";
 import APIConfig, { APIACTIVATEURL } from "./../../../Configuration/APIConfig";
@@ -10,12 +10,11 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 import { Header, Icon, BookingTime, Tag, FormOption, QuantityPicker, Button, Text, } from './../../../components';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import airports from "../../Data/AirportList.json"
 
-
-export default function FlightSearch({ navigation }) {
+export default function FlightSearch({navigation}) {
   const [isOneWay, setIsOneWay] = useState(false);
-  const [journeyType, setJourneyType] = useState("0");
-  const [value, setValue] = useState(0)
+  const [journeyType, setJourneyType] = useState("ROUNDTRIP");
   const [displayFrom, setDisplayFrom] = useState('Shamshabad Rajiv Gandhi Intl Arpt, Hyderabad(HYD)');
   const [displayTo, setDisplayTo] = useState('Chhatrapati Shivaji, Mumbai(BOM)');
   const [Dlocations, setDLocations] = useState([]);
@@ -34,12 +33,14 @@ export default function FlightSearch({ navigation }) {
   const [adults, setAdults] = useState(1);
   const [kids, setKids] = useState(0);
   const [infants, setInfants] = useState(0);
-  const [cabinClass, setCabinClass] = useState(0);
-  const [preffered, setPreferred] = useState(0);
+  const [cabinClass, setCabinClass] = useState("ECONOMY");
+  const [preffered, setPreferred] = useState("REGULAR");
   const [userId, setUserId] = useState("00000000-0000-0000-0000-000000000000");
   const [agentId, setAgentId] = useState("00000000-0000-0000-0000-000000000000");
   const [requestedBy, setRequestedBy] = useState("CUSTOMER");
   const [loading, setLoading] = useState(false);
+  const [departureResults, setDepartureResults] = useState([]);
+  const [returnResults, setReturnResults] = useState([]);
   const dateDepartureShown = moment(departureDate).format('dddd, DD MMM yyyy');
   const dateReturnShown = moment(returnDate).format('dddd, DD MMM yyyy');
   const newDate = new Date(returnDate).setDate(1)
@@ -48,24 +49,23 @@ export default function FlightSearch({ navigation }) {
 
   const { colors } = useTheme();
   const { t } = useTranslation();
-  
+  const inputDRef = useRef(null);
+  const inputRRef = useRef(null);
   
 
   var journeytype = [
-    { label: 'Return', value: 0 },
-    { label: 'One Way', value: 1 }
+    { label: 'Return', value: "ROUNDTRIP" },
+    { label: 'One Way', value: "ONEWAY" }
   ];
   const handleJourneyType = (value) => {
-    if (value === 1) {
+    if (value === "ONEWAY") {
       setIsOneWay(true)
-
-      console.log(value)
-    }
+     }
     else {
-      setIsOneWay(false);
-
+      setIsOneWay(false)
     }
     setJourneyType(value)
+    console.log(journeyType)
   }
  
   const getDLocation = async (location) => {
@@ -190,61 +190,125 @@ const handleDecreaseInfants = () => {
 }
 
 var CabinItems = [
-  { label: 'ECONOMY', value: 0 },
-  { label: 'BUSINESS', value: 1 },
-  { label: 'FIRST', value: 2 }
+  { label: 'ECONOMY', value: "ECONOMY" },
+  { label: 'BUSINESS', value: "BUSINESS" },
+  { label: 'FIRST', value: "FIRST" }
 ];
 
 const handleClassType = (value) => {
   setCabinClass(value)
+  
 }
 
 var PreferredItems = [
-  { label: 'REGULAR', value: 0 },
-  { label: 'STUDENT', value: 1 },
-  { label: 'SENIOR CITIZEN', value: 2 }
+  { label: 'REGULAR', value: "REGULAR" },
+  { label: 'STUDENT', value: "STUDENT" },
+  { label: 'SENIOR CITIZEN', value: "SENIOR_CITIZEN" }
 ];
 
 const handlePrefferedType = (value) => {
   setPreferred(value)
+  
 }
+const departureDate1 = moment(departureDate).format('YYYY-MM-DD')
+const returnDate1 =  moment(returnDate).format('YYYY-MM-DD') 
 
-const handleSearch = (e) => {
-  e.preventDefault();
-  const searchQuery = {
-    "journeyType": journeyType,
-    "locationFrom": locationFrom,
-    "locationTo": locationTo,
-    "displayFrom": displayFrom,
-    "displayTo": displayTo,
-    "adults": adults,
-    "kids": kids,
-    "infants": infants,
-    "cabinClass": cabinClass,
-    "departureDate": moment(departureDate).format('YYYY-MM-DD'),
-    "returnDate": moment(returnDate).format('YYYY-MM-DD'),
-    "cityFrom": cityFrom,
-    "cityTo": cityTo,
-    "userId": userId,
-    "agentId": agentId,
-    "from": from,
-    "to": to,
-    "requestedBy": requestedBy,
-    "isOneWay":isOneWay
-}
-if (isOneWay) {
-  navigation.navigate("OneWayFlight");
-}
-else {
-    if (isDomestic === "INT") {
-      navigation.navigate('/oneway-flights/' + adults + "/" + kids + "/" + infants + "/" + isDomestic, { state: { searchQuery } });
-    }
-    else {
-      navigation.navigate('/roundtrip-flights/' + adults + "/" + kids + "/" + infants + "/" + isDomestic, { state: { searchQuery } });
-    }
-}
+const handleDepartureAirportSearch = (value) => {
+  
+  setDisplayFrom(value);
+  if (value.length > 0) {
+      const filteredAirports = airports
+          .filter(airport =>
+              airport.airportCode.toLowerCase().includes(value.toLowerCase())
+          )
+          .slice(0, 10);
+      setDepartureResults(filteredAirports);
+      if (filteredAirports.length === 0) {
+          const filteredAirports1 = airports
+              .filter(airport =>
+                  airport.cityName.toLowerCase().includes(value.toLowerCase())
+              )
+              .slice(0, 10);
+          setDepartureResults(filteredAirports1);
+      }
+  } else {
+      setDepartureResults([]);
+  }
+};
+const handleDepartureAirportClick = () => {
+  setReturnResults([]);
+  let filteredAirports = airports.filter(function (p) {
+      return p.display === true
+  }).slice(0, 10);
+  setDepartureResults(filteredAirports);
+  inputDRef.current.select();
+};
 
-
+const handleReturnAirportSearch = (e) => {
+  const value = e.target.value;
+  setDisplayTo(value);
+  if (value.length > 0) {
+      const filteredAirports = airports
+          .filter(airport =>
+              airport.airportCode.toLowerCase().includes(value.toLowerCase())
+          )
+          .slice(0, 10);
+      setReturnResults(filteredAirports);
+      if (filteredAirports.length === 0) {
+          const filteredAirports1 = airports
+              .filter(airport =>
+                  airport.cityName.toLowerCase().includes(value.toLowerCase())
+              )
+              .slice(0, 10);
+          setReturnResults(filteredAirports1);
+      }
+  } else {
+      setReturnResults([]);
+  }
+};
+const handleReturnAirportClick = (e) => {
+  setDepartureResults([]);
+  let filteredAirports = airports.filter(function (p) {
+      return p.display === true
+  }).slice(0, 10);
+  setReturnResults(filteredAirports);
+  inputRRef.current.select();
+};
+const handleSearch = () => {
+ 
+      const searchQuery = {
+          "journeyType": journeyType,
+          "locationFrom": locationFrom,
+          "locationTo": locationTo,
+          "displayFrom": displayFrom,
+          "displayTo": displayTo,
+          "adults": adults,
+          "kids": kids,
+          "infants": infants,
+          "cabinClass": cabinClass,
+          "departureDate": moment(departureDate).format('YYYY-MM-DD'),
+          "returnDate": moment(returnDate).format('YYYY-MM-DD'),
+          "cityFrom": cityFrom,
+          "cityTo": cityTo,
+          "userId": userId,
+          "agentId": agentId,
+          "from": from,
+          "to": to,
+          "requestedBy": requestedBy,
+          "isOneWay":isOneWay
+      }
+      if (isOneWay) {
+          navigation.navigate("OneWayFlight",{journeyType,locationFrom,locationTo,displayFrom,displayTo,adults,kids,infants,cabinClass,departureDate1,returnDate1,cityFrom,cityTo,userId,from,to,requestedBy,isOneWay});
+      }
+      else {
+          if (isDomestic === "INT") {
+              navigation.navigate('/oneway-flights/' + adults + "/" + kids + "/" + infants + "/" + isDomestic, { state: { searchQuery } });
+          }
+          else {
+              navigation.navigate('/roundtrip-flights/' + adults + "/" + kids + "/" + infants + "/" + isDomestic, { state: { searchQuery } });
+          }
+      
+  }
 }
 
   return (
@@ -256,8 +320,8 @@ else {
         <ScrollView contentContainerStyle={styles.contain} style={{ flex: 1 }}>
           <View><RadioForm
             radio_props={journeytype}
-            initial={value}
-            onPress={(value) => handleJourneyType(value)}
+            initial={0}
+            onPress={handleJourneyType}
             labelHorizontal
             formHorizontal
             labelColor="black"
@@ -272,20 +336,20 @@ else {
               {t('FROM')}
             </Text>
             <TextInput
-              id="displayFrom" name="displayFrom" value={displayFrom} onChangeText={(text) => handleDepartureLocationChange(text)} placeholder="Departure" autoComplete="off"
+              id="displayFrom" name="displayFrom" value={displayFrom} ref={inputDRef} onChangeText={(text) => handleDepartureAirportSearch(text)} onPress={handleDepartureAirportClick} onFocus={handleDepartureAirportClick} placeholder="Search for an airport" autoComplete="off"
               style={styles.Textinput}
             />
-            {Dlocations ?
-              Dlocations.map(location => <View style={styles.Departurelist}><TouchableOpacity onPress={selectdepartureLocationHandle.bind(null, location)} ><Text style={styles.DepartureText}><Icon1 name="flight-takeoff" color={BaseColor.whiteColor} size={25} />  {location.airportName},{location.cityName},({location.airportCode})</Text></TouchableOpacity></View>) : ""}
+            {departureResults.length > 0 ? 
+              departureResults.map((airport) =><ScrollView style={{flex:1,height:400}}><View style={styles.Departurelist}><TouchableOpacity  ><Text style={styles.DepartureText}><Icon1 name="flight-takeoff" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text><Text>{airport.airportName}</Text><Text>{airport.countryName}</Text></TouchableOpacity></View></ScrollView> ) : ""}
             <Text body1 bold style={styles.from}>
               {t('TO')}
             </Text>
             <TextInput
-              id="displayTo" name="displayTo" value={displayTo} onChangeText={(text) => handleReturnLocationChange(text)} placeholder="Arrival" autoComplete="off"
+              id="displayTo" name="displayTo" value={displayTo} ref={inputRRef} onChangeText={(text) => handleReturnAirportSearch(text)} onPress={handleReturnAirportClick} onFocus={handleReturnAirportClick} placeholder="Search for an airport" autoComplete="off"
               style={styles.Textinput}
             />
-            {Rlocations ?
-              Rlocations.map(location => <View style={styles.Departurelist}><TouchableOpacity onPress={selectReturnLocationHandle.bind(null, location)}><Text style={styles.DepartureText}><Icon1 name="flight-land" color={BaseColor.whiteColor} size={25} />  {location.airportName},{location.cityName},({location.airportCode})</Text></TouchableOpacity></View>) : ""}
+            {returnResults.length > 0 ?
+              returnResults.map((airport) => <View style={styles.Departurelist}><TouchableOpacity onPress={selectReturnLocationHandle.bind(null)}><Text style={styles.DepartureText}><Icon1 name="flight-land" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text><Text>{airport.airportName}</Text><Text>{airport.countryName}</Text></TouchableOpacity></View>) : ""}
           </View>
           <View>
             <Text body1 bold style={styles.from}>
@@ -382,8 +446,8 @@ else {
           </View>
           <View style={styles.from}><RadioForm
             radio_props={CabinItems}
-            initial={cabinClass}
-            onPress={e => handleClassType(e)}
+            initial={0}
+            onPress={handleClassType}
             labelHorizontal
             formHorizontal
             labelColor="black"
@@ -394,8 +458,8 @@ else {
           /></View>
           <View style={styles.from1}><RadioForm
             radio_props={PreferredItems}
-            initial={preffered}
-            onPress={e => handlePrefferedType(e)}
+            initial={0}
+            onPress={handlePrefferedType}
             labelHorizontal
             formHorizontal
             labelColor="black"
@@ -408,7 +472,7 @@ else {
             <Button
               loading={loading}
               full
-              onPress={e => handleSearch(e)}>
+              onPress={() => handleSearch()}>
               {t('search')}
             </Button>
           </View>

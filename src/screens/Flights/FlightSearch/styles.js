@@ -44,7 +44,8 @@ Departurelist:{
     marginLeft:10,
     color:"white",
     width:"100%",
-    position:"relative"
+    position:"relative",
+    
 },
 DepartureText:{
    fontSize:15,

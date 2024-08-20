@@ -15,7 +15,7 @@ export const BaseColor = {
   orangeColor: '#E5634D',
   blueColor: '#5DADE2',
   pinkColor: '#A569BD',
-  greenColor: '#58D68D',
+  greenColor: '#088675',
 };
 
 /**

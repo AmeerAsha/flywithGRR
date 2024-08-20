@@ -18,6 +18,8 @@ import Bottomnavigation from './bottomnavigation';
 import SignIn from '../screens/Profile/SignIn';
 import SignUp from '../screens/Profile/SignUp';
 import OneWayFlight from '../screens/Flights/OneWayFlight';
+import OneWayFlight1 from '../screens/Flights/OneWayFlight1';
+import OneWayFlightSummary from '../screens/Flights/OneWayFlightSummary';
 
 const Stack = createStackNavigator();
 
@@ -41,6 +43,8 @@ const Navigation = () => {
           <Stack.Screen name="SignIn" component={SignIn} options={{headerShown:false}}/>
           <Stack.Screen name="SignUp" component={SignUp} options={{headerShown:false}}/>
           <Stack.Screen name="OneWayFlight" component={OneWayFlight} options={{headerShown:false}}/>
+          <Stack.Screen name="OneWayFlight1" component={OneWayFlight1} options={{headerShown:false}}/>
+          <Stack.Screen name="OneWayFlightSummary" component={OneWayFlightSummary} options={{headerShown:false}}/>
         </Stack.Navigator>
         
     </NavigationContainer>
