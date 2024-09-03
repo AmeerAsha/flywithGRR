@@ -1,5 +1,5 @@
-import { StatusBar } from 'react-native';
-import React from 'react';
+import { Modal, StatusBar, TouchableOpacity, View, Animated ,StyleSheet,Text} from 'react-native';
+import React, { useRef, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {BaseColor, useTheme, useFont} from './../config';
@@ -13,19 +13,52 @@ import FlightSearch from '../screens/Flights/FlightSearch';
 import HotelSearch from '../screens/Hotel/HotelSearch';
 import AboutUs from '../screens/AboutUs/index.';
 import SignIn from '../screens/Profile/SignIn';
-
+import Icon4 from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const Tab = createBottomTabNavigator();
 
 
 const Bottomnavigation = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const slideAnim = useRef(new Animated.Value(300)).current;
     const {colors} = useTheme();
     const font = useFont();
     const {t} = useTranslation();
+    const openModal = () => {
+      setModalVisible(true);
+      Animated.timing(slideAnim, {
+        toValue: 0, // Final position (on-screen)
+        duration: 300, // Duration of the animation
+        useNativeDriver: true,
+      }).start();
+    };
+  
+    const closeModal = () => {
+      Animated.timing(slideAnim, {
+        toValue: 300, // Back to initial position (off-screen)
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setModalVisible(false)); // Close the modal after the animation
+    };
     
   return (
     <>
-      <StatusBar />
+    <StatusBar />
+    <TouchableOpacity style={styles.fareRules} onPress={openModal}><Text body2 style={{textAlign:"center"}}><Icon4 name="drag-horizontal-variant"  size={40}/></Text></TouchableOpacity>
+          <Modal transparent visible={modalVisible} animationType="none">
+        <TouchableOpacity style={styles.modalOverlay} onPress={closeModal}>
+          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <Animated.View style={[styles.modalContent, { transform: [{ translateY: slideAnim }] }]}>
+              <View style={styles.modal}>
+              <Text title3 bold primaryColor>Fare Rules</Text>
+              <TouchableOpacity onPress={closeModal}><Text style={styles.close}><Icon1 name="closecircle"  size={25}/></Text></TouchableOpacity>
+              </View>
+              
+            </Animated.View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
+      
       
         <Tab.Navigator
           screenOptions={({ route }) => ({
@@ -42,11 +75,15 @@ const Bottomnavigation = () => {
                 return <Icon3 name="account-circle" size={size} color={color} />;
               } 
             },
-            tabBarActiveTintColor: colors.primary,
-            tabBarInactiveTintColor: BaseColor.grayColor,
+            tabBarActiveTintColor: BaseColor.blueColor,
+            tabBarInactiveTintColor: BaseColor.whiteColor,
             tabBarStyle: [
               {
                 display: 'flex',
+                backgroundColor:colors.primary,
+                borderTopLeftRadius:50,
+                borderTopRightRadius:50,
+                height:70
               },
               null,
             ],
@@ -69,5 +106,25 @@ const Bottomnavigation = () => {
     </>
   );
 };
+const styles =StyleSheet.create({
+  modal:{
+    flex:1,
+    flexDirection:"row",
+    justifyContent:"space-between"
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+      justifyContent: 'flex-end',
+    },
+    modalContent: {
+      backgroundColor: colors.primary,
+      padding: 20,
+      borderTopLeftRadius: 50,
+      borderTopRightRadius: 50,
+      height: 70,
+    },
+
+})
 
 export default Bottomnavigation;

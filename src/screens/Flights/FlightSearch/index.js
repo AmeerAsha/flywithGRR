@@ -13,6 +13,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import airports from "../../Data/AirportList.json"
 
 export default function FlightSearch({navigation}) {
+  const [outerScrollEnabled, setOuterScrollEnabled] = useState(true);
   const [isOneWay, setIsOneWay] = useState(false);
   const [journeyType, setJourneyType] = useState("ROUNDTRIP");
   const [displayFrom, setDisplayFrom] = useState('Shamshabad Rajiv Gandhi Intl Arpt, Hyderabad(HYD)');
@@ -241,9 +242,20 @@ const handleDepartureAirportClick = () => {
       return p.display === true
   }).slice(0, 10);
   setDepartureResults(filteredAirports);
-  inputDRef.current.select();
+  //inputDRef.current.select();
 };
 
+const handleDepartureSelect = (data) => {
+  if (data.countryCode !== "IN") {
+      setIsDomestic("INT")
+  }
+  var DF = data.airportName + ", " + data.cityName + "(" + data.airportCode + ")";
+  setDisplayFrom(DF);
+  setLocationFrom(data.airportCode)
+  setCityFrom(data.cityName);
+  setFrom(data.cityName);
+  setDepartureResults([]);
+}
 const handleReturnAirportSearch = (e) => {
   const value = e.target.value;
   setDisplayTo(value);
@@ -272,8 +284,20 @@ const handleReturnAirportClick = (e) => {
       return p.display === true
   }).slice(0, 10);
   setReturnResults(filteredAirports);
-  inputRRef.current.select();
+ // inputRRef.current.select();
 };
+
+const handleReturnSelect = (data) => {
+  var DF = data.airportName + ", " + data.cityName + "(" + data.airportCode + ")";
+  if (data.countryCode !== "IN") {
+      setIsDomestic("INT")
+  }
+  setDisplayTo(DF);
+  setLocationTo(data.airportCode)
+  setCityTo(data.cityName);
+  setTo(data.cityName);
+  setReturnResults([]);
+}
 const handleSearch = () => {
  
       const searchQuery = {
@@ -317,7 +341,7 @@ const handleSearch = () => {
       <SafeAreaView
         style={BaseStyle.safeAreaView}
         edges={['right', 'left', 'bottom']}>
-        <ScrollView contentContainerStyle={styles.contain} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.contain} style={{ flex: 1 }} scrollEnabled={outerScrollEnabled}>
           <View><RadioForm
             radio_props={journeytype}
             initial={0}
@@ -339,8 +363,28 @@ const handleSearch = () => {
               id="displayFrom" name="displayFrom" value={displayFrom} ref={inputDRef} onChangeText={(text) => handleDepartureAirportSearch(text)} onPress={handleDepartureAirportClick} onFocus={handleDepartureAirportClick} placeholder="Search for an airport" autoComplete="off"
               style={styles.Textinput}
             />
-            {departureResults.length > 0 ? 
-              departureResults.map((airport) =><ScrollView style={{flex:1,height:400}}><View style={styles.Departurelist}><TouchableOpacity  ><Text style={styles.DepartureText}><Icon1 name="flight-takeoff" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text><Text>{airport.airportName}</Text><Text>{airport.countryName}</Text></TouchableOpacity></View></ScrollView> ) : ""}
+            {departureResults.length > 0 &&(
+              <View style={styles.listContainer}>
+             <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={true}
+            onTouchStart={() => setOuterScrollEnabled(false)} 
+          onTouchEnd={() => setOuterScrollEnabled(true)}   
+          >
+              {departureResults.map((airport) =>(
+                <TouchableOpacity key={airport.airportCode} onPress={()=>handleDepartureSelect(airport)}>
+                <Text style={styles.DepartureText}><Icon1 name="flight-takeoff" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text>
+                <View style={{flex:1,flexDirection:"row"}}>
+                  <View><Text style={styles.DepartureText1}>{airport.airportName}</Text></View>
+                  <View style={{flex:1,justifyContent:"flex-end"}}><Text style={styles.DepartureText2}>{airport.countryName}</Text></View>
+                  </View>
+                  </TouchableOpacity>
+                   ) )}
+             </ScrollView>
+             </View>
+            ) }
+              
             <Text body1 bold style={styles.from}>
               {t('TO')}
             </Text>
@@ -348,8 +392,27 @@ const handleSearch = () => {
               id="displayTo" name="displayTo" value={displayTo} ref={inputRRef} onChangeText={(text) => handleReturnAirportSearch(text)} onPress={handleReturnAirportClick} onFocus={handleReturnAirportClick} placeholder="Search for an airport" autoComplete="off"
               style={styles.Textinput}
             />
-            {returnResults.length > 0 ?
-              returnResults.map((airport) => <View style={styles.Departurelist}><TouchableOpacity onPress={selectReturnLocationHandle.bind(null)}><Text style={styles.DepartureText}><Icon1 name="flight-land" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text><Text>{airport.airportName}</Text><Text>{airport.countryName}</Text></TouchableOpacity></View>) : ""}
+            {returnResults.length > 0 &&(
+              <View style={styles.listContainer}>
+             <ScrollView
+            style={styles.scrollView}
+            contentContainerStyle={styles.scrollContainer}
+            showsVerticalScrollIndicator={true}
+            onTouchStart={() => setOuterScrollEnabled(false)} 
+          onTouchEnd={() => setOuterScrollEnabled(true)}   
+          >
+              {returnResults.map((airport) =>(
+                <TouchableOpacity key={airport.airportCode} onPress={()=> handleReturnSelect(airport)}>
+                <Text style={styles.DepartureText}><Icon1 name="flight-land" color={BaseColor.whiteColor} size={25} />  {airport.cityName} ({airport.airportCode})</Text>
+                <View style={{flex:1,flexDirection:"row"}}>
+                  <View><Text style={styles.DepartureText1}>{airport.airportName}</Text></View>
+                  <View style={{flex:1,justifyContent:"flex-end"}}><Text style={styles.DepartureText2}>{airport.countryName}</Text></View>
+                  </View>
+                  </TouchableOpacity>
+                  ) )}
+             </ScrollView>
+             </View>
+            )}
           </View>
           <View>
             <Text body1 bold style={styles.from}>
@@ -380,8 +443,9 @@ const handleSearch = () => {
                 onPress={showDatepicker.bind(null, 'to')}
                 style={styles.dateBox}
               >
-                <Text body1 regular>{dateReturnShown}</Text>
-                <Icon1 name="calendar-month" style={styles.calendar} />
+               <View><Text body1 regular>{dateReturnShown}</Text></View> 
+                <View><Icon1 name="calendar-month" style={styles.calendar} /></View>
+                
               </TouchableOpacity> :
               <TouchableOpacity
                 onPress={showDatepicker.bind(null, '')}

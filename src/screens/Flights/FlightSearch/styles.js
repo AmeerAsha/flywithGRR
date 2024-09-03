@@ -38,20 +38,29 @@ Textinput:{
     fontSize:15,
     backgroundColor:"white"
 },
-Departurelist:{
-    backgroundColor:"#E5634D",
-    borderRadius:10,
-    marginLeft:10,
-    color:"white",
-    width:"100%",
-    position:"relative",
-    
-},
+
 DepartureText:{
    fontSize:15,
    color:"white",
-   margin:10
+   margin:10,
+   fontWeight:"bold"
 
+},
+DepartureText1:{
+  fontSize:13,
+  color:"white",
+  marginTop:3,
+  marginLeft:40,
+  fontWeight:"400"
+
+},
+DepartureText2:{
+  fontSize:13,
+  color:"white",
+  marginTop:3,
+ textAlign:"right",
+  fontWeight:"400",
+  marginRight:10
 },
 dateBox: {
   borderColor: "#E5634D",
@@ -61,14 +70,15 @@ dateBox: {
   borderRadius: 10,
   display: 'flex',
   flexDirection: 'row',
+  justifyContent: 'space-between', // Space between text and icon
+    alignItems: 'center',
   padding: 9,
 },
 calendar:{
 fontSize:30,
 color:"#E5634D",
-marginRight:40,
-marginLeft:50,
-position:"relative"
+
+
 },
 centerView: {
     alignItems: 'center',
@@ -80,5 +90,20 @@ centerView: {
     borderRadius: 8,
     flex: 1,
     alignItems: 'center',
+  },
+  listContainer: {
+    maxHeight: 250, // Set a specific max height for the container
+    width: '100%',
+    borderColor: '#ccc',
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor:"#E5634D",
+  },
+  scrollView: {
+    width: '100%',
+    height:'100%'
+  },
+  scrollContainer: {
+    flexGrow: 1, // Ensure the content grows to allow scrolling
   },
 });

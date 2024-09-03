@@ -134,5 +134,17 @@ edit:{
  color:"#E5634D",
  fontWeight:"bold"
 
-}
+},
+modalOverlay: {
+  flex: 1,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  justifyContent: 'flex-end',
+},
+modalContent: {
+  backgroundColor: 'white',
+  padding: 20,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  height: 200,
+},
 });

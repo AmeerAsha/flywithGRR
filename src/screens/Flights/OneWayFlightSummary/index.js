@@ -1,20 +1,39 @@
-import React, { useEffect, useState } from 'react'
-import { Image, SafeAreaView, ScrollView, View } from 'react-native'
+import React, { useEffect, useState,useRef } from 'react'
+import { Image, SafeAreaView, ScrollView, TouchableOpacity, View, Modal, Animated ,Button} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { BaseColor, BaseStyle } from '../../../config'
+import { BaseColor, BaseStyle ,useTheme} from '../../../config'
 import styles from './styles';
 import moment from 'moment';
 import PageLoader from "../../Layout/PageLoader";
 import { Text } from '../../../components';
 import { Images } from '../../../config';
-
-const OneWayFlightSummary = ({route}) => {
+import Icon1 from 'react-native-vector-icons/AntDesign'
+const OneWayFlightSummary = ({route,navigation}) => {
   const [loading, setLoading] = useState(true);
-  const [segments, setSegments] = useState([])
+  const [segments, setSegments] = useState([]);
+  const { colors } = useTheme();
+  const [modalVisible, setModalVisible] = useState(false);
+  const slideAnim = useRef(new Animated.Value(300)).current;
+  const [baseprice, setBasePrice] = useState(0)
+    const [tax, setTax] = useState(0)
+    const [totalPrice, setTotalPrice] = useState(0)
+    const [totalFare, setTotalFare] = useState(0)
+    const [convenienceFee, setConvenienceFee] = useState(0)
+    const [gst, setGST] = useState(0)
+    const [gstAmount, setGSTAmount] = useState(0)
 
     const {flightsdata,searchData} = route.params;
     useEffect(()=>{
-      setSegments(flightsdata.tFSegments)
+            //setFlightData(state.flightsdata)
+            setSegments(flightsdata.tFSegments)
+            setBasePrice(flightsdata.tFPriceDetails.basePrice)
+            setTax(flightsdata.tFPriceDetails.tax)
+            setTotalPrice(flightsdata.tFPriceDetails.totalPrice)
+            setTotalFare(flightsdata.tFPriceDetails.totalFare)
+            setConvenienceFee(flightsdata.tFPriceDetails.convenienceFee)
+            setGST(flightsdata.tFPriceDetails.gst)
+            setGSTAmount(flightsdata.tFPriceDetails.gstAmount)
+           // setFlightPriceData(flightsdata.tfPriceDetails);
      },
      
      []);
@@ -22,6 +41,25 @@ const OneWayFlightSummary = ({route}) => {
       var h = mins / 60 | 0, m = mins % 60 | 0;
       var durationformat = h + "h " + m + "m";
       return durationformat;
+    };
+    const openModal = () => {
+      setModalVisible(true);
+      Animated.timing(slideAnim, {
+        toValue: 0, // Final position (on-screen)
+        duration: 300, // Duration of the animation
+        useNativeDriver: true,
+      }).start();
+    };
+  
+    const closeModal = () => {
+      Animated.timing(slideAnim, {
+        toValue: 300, // Back to initial position (off-screen)
+        duration: 300,
+        useNativeDriver: true,
+      }).start(() => setModalVisible(false)); // Close the modal after the animation
+    };
+    const HandleFlightSearch = () => {
+      navigation.navigate('OneWayFlight')
     }
   return (
     <SafeAreaView style={BaseStyle.safeAreaView}
@@ -40,8 +78,25 @@ const OneWayFlightSummary = ({route}) => {
         {segments.length > 0 ? segments.map((seg, index) =>
         <View>
           <View style={styles.bottomLeft}>
-          <Text body2 accentColor bold>Departure</Text>
-          <Text body2>{moment(seg.tFDepartureData.departureDateTime).format('DD MMM YYYY')}</Text>
+            <View style={styles.depView}>
+            <Text body2 semibold style={{color:"#CE3426"}}>Departure</Text>
+            </View>
+          
+          <Text body2 style={styles.dep}>{moment(seg.tFDepartureData.departureDateTime).format('DD MMM YYYY')}</Text>
+          <TouchableOpacity style={styles.fareRules} onPress={openModal}><Text body2 style={styles.faretxt}>Fare Rules</Text></TouchableOpacity>
+          <Modal transparent visible={modalVisible} animationType="none">
+        <TouchableOpacity style={styles.modalOverlay} onPress={closeModal}>
+          <TouchableOpacity activeOpacity={1} onPress={() => {}}>
+            <Animated.View style={[styles.modalContent, { transform: [{ translateY: slideAnim }] }]}>
+              <View style={styles.modal}>
+              <Text title3 bold primaryColor>Fare Rules</Text>
+              <TouchableOpacity onPress={closeModal}><Text style={styles.close}><Icon1 name="closecircle"  size={25}/></Text></TouchableOpacity>
+              </View>
+              
+            </Animated.View>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      </Modal>
           </View>
           <View style={styles.bottomLeft}>
              <Image source={Images.A0} style={styles.image}/>   
@@ -54,10 +109,11 @@ const OneWayFlightSummary = ({route}) => {
             </Text>
           </View>
         </View>
-        <View style={{flex: 1.5, alignItems: 'center'}}>
+        <View style={styles.contentinfo}>
           <Text headline black>
           {moment(seg.tFArrivalData.arrivalDateTime).format('hh:mm A')}
           </Text>
+          <Text style={{color:BaseColor.dividerColor}}>{seg.tFDepartureData.airportName}, {seg.tFDepartureData.city}</Text>
           <View style={styles.contentLine}>
             <View style={styles.line} />
             <Icon
@@ -67,16 +123,40 @@ const OneWayFlightSummary = ({route}) => {
               solid
               enableRTL={true}
             />
-            <View style={styles.dot} />
+            <View style={[styles.dot, {backgroundColor: colors.primary}]} />
           </View>
           <Text footnote grayColor bold>
           {getTimeFromMins(seg.duration)}
           </Text>
+          <Text headline black>
+          {moment(seg.tFArrivalData.arrivalDateTime).format('hh:mm A')}
+          </Text>
+          <Text style={{color:BaseColor.dividerColor}}>{seg.tFArrivalData.airportName}, {seg.tFArrivalData.city}</Text>
         </View>
         </View>
       )
         
         :""}
+        </View>
+        <View style={styles.btmView}>
+          <Text title3 bold>Payment Summary</Text>
+          <View style={styles.payment1}>
+            <Text body1>Base Fare</Text>
+            <Text body1 bold style={styles.price1}>INR {Math.round(baseprice)}</Text>
+          </View>
+          <View style={styles.payment2}>
+            <Text body1>Tax & Service Fee</Text>
+            <Text body1 bold style={styles.price2}>INR {Math.round(tax)}</Text>
+          </View>
+          <View style={styles.line1} />
+          <View style={styles.payment2}>
+            <Text body1 bold>Total Price</Text>
+            <Text body1 bold style={styles.price3}>INR {Math.round(totalPrice)}</Text>
+          </View>
+          <View style={styles.lastview}>
+           <View style={{backgroundColor:"#cb3022",paddingHorizontal:10,paddingVertical:20,marginLeft:10,borderRadius:7}}><TouchableOpacity onPress={() => {navigation.goBack();}}><Text headline bold whiteColor>Back to Flights List</Text></TouchableOpacity></View> 
+            <View style={{backgroundColor:"blue",paddingHorizontal:30,paddingVertical:20,marginLeft:30,borderRadius:7}} ><TouchableOpacity><Text headline bold whiteColor>Submit</Text></TouchableOpacity></View>
+          </View>
         </View>
         </ScrollView>
     </SafeAreaView>
